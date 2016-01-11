@@ -1,0 +1,44 @@
+﻿@model BuildTable.Models.MainViewModel
+@{
+    ViewBag.Title = "Home Page";
+}
+
+<div>
+    <table>
+    <tr>
+        <td>ID</td>
+        <td>Name</td>
+        <td>State</td>
+        <td>City</td>
+    </tr>
+
+    @*@foreach (var m in Model.Students)
+        {
+        <tr>
+            <td><input type="text" value="@m.ID" /></td>
+            <td><input type="text" value="@m.Name" /></td>
+            <td>
+                @Html.DropDownListFor(x => x.SelectedState new SelectList(Model.Students.States, "ID", "Name", Model.SelectedState), "-- Select States--", new { id = "cboState", @class = "edit-mode" })
+            </td>
+            <td>
+                @Html.DropDownListFor(x => x.SelectedCity new SelectList(Model.Students.Cities, "ID", "Name", Model.SelectedCity), "-- Select States--", new { id = "cboState", @class = "edit-mode" })
+            </td>
+        </tr>
+        }*@
+
+
+        @for(int i = 0; i < Model.Students.Count; i++)
+        {
+            <tr>
+                <td><input type="text" value="@Model.Students[i].ID" /></td>
+                <td><input type="text" value="@Model.Students[i].Name" /></td>
+                <td>
+                    @Html.DropDownListFor(m => m.Students[i].StateID, new SelectList(Model.Students[i].States, "ID", "Name",Model.Students[i].StateID), "-- Select States--", new { @class = "edit-mode" })
+                </td>
+                <td>
+                    @Html.DropDownListFor(m => m.Students[i].CityID, new SelectList(Model.Students[i].Cities, "ID", "Name",Model.Students[i].CityID), "-- Select Cities--", new { @class = "edit-mode" })
+                </td>
+            </tr>
+        }
+    </table>
+</div>
