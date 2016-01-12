@@ -5,6 +5,7 @@ using System.Web;
 
 namespace BuildTable.Models
 {
+
     public class MainViewModel
     {
         public List<Student> Students { get; set; }
@@ -32,5 +33,6 @@ namespace BuildTable.Models
     {
         public int ID { get; set; }
         public string Name { get; set; }
+        public int StateID { get; set; }
     }
 }

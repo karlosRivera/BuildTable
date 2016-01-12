@@ -8,8 +8,6 @@
     grid.Bind(Model.Students);
 
 }
-
-
 @grid.GetHtml(
         tableStyle: "webgrid-table",
         headerStyle: "webgrid-header",
@@ -31,7 +29,7 @@
 
             //grid.Column(columnName: "StateName", header: "State Name", format: @<text>@Html.DropDownListFor(x => x.SelectedState, new SelectList(Model.Students[1].States, "ID", "Name", Model.SelectedState = item.StateID), "-- Select States--", new { id = "cboState", @class = "edit-mode" })</text>,style:"NameColWidth"),
 
-            grid.Column(columnName: "StateName", header: "State Name", format: @<text>@Html.DropDownListFor(x => x.SelectedState, new SelectList(Model.Students.SelectMany(x => x.States).Where(x => x.ID == item.StateID), "ID", "Name", Model.SelectedState = item.StateID), "-- Select States--", new { id = "cboState", @class = "edit-mode" })</text>,style:"NameColWidth"),
-            grid.Column(columnName: "CityName", header: "City Name", format: @<text>@Html.DropDownListFor(x => x.SelectedCity, new SelectList(Model.Students.SelectMany(x => x.Cities).Where(x => x.ID == item.CityID), "ID", "Name", Model.SelectedCity = item.CityID), "-- Select City--", new { id = "cboCity", @class = "edit-mode" })
-            </text>,style:"NameColWidth")
-            ))
+                grid.Column(columnName: "StateName", header: "State Name", format: @<text>@Html.DropDownListFor(x => x.SelectedState, new SelectList(Model.Students.SelectMany(x => x.States).Where(x => x.ID == item.StateID), "ID", "Name", Model.SelectedState = item.StateID), "-- Select States--", new { id = "cboState", @class = "edit-mode" })</text>,style:"NameColWidth"),
+                grid.Column(columnName: "CityName", header: "City Name", format: @<text>@Html.DropDownListFor(x => x.SelectedCity, new SelectList(Model.Students.SelectMany(x => x.Cities).Where(x => x.StateID == item.StateID), "ID", "Name", Model.SelectedCity = item.CityID), "-- Select City--", new { id = "cboCity", @class = "edit-mode" })
+                </text>, style: "NameColWidth")
+           ))
