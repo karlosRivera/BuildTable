@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using System.ComponentModel.DataAnnotations;
 
 namespace BuildTable.Models
 {
@@ -15,9 +16,14 @@ namespace BuildTable.Models
 
     public class Student
     {
+        [Required]
         public int ID { get; set; }
+
+        [Required]
         public string Name { get; set; }
+        [Required]
         public int StateID { get; set; }
+        [Required]
         public int CityID { get; set; }
         public List<States> States { get; set; }
         public List<Cities> Cities { get; set; }

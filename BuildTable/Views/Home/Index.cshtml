@@ -85,16 +85,14 @@ select.input-validation-error
                 alert("val Ok");
             }
             else {
-                alert("VAl Fail!");
-                $("span[class='field-validation-error']").each(function () {
-
+                
+                $('table td span.field-validation-error').each(function () {
                     $(this).addClass("hidden");//Add class hidden to hide  @@Html.ValidationMessageFor(model => model.xyz) if using bootstrap , else use css
-                    var inputID = $(this).attr("data-valmsg-for");//get the id of the input field for which this validation prompted
-                    var validationMessage = $(this).html();//Get validation message for input filed which is prompted
+                    var inputID = $(this).data("valmsg-for");//get the id of the input field for which this validation prompted
+                    var validationMessage = $(this).text();//Get validation message for input filed which is prompted
                     //$("#" + inputID).tooltip({ 'trigger': 'hover', 'title': validationMessage });//Trigger the tooltip now, if using bootstrap.
 
                     //******OR*******
-
                     $("#" + inputID).attr("title", validationMessage);
                 });
             }
