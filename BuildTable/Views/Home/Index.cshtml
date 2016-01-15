@@ -3,42 +3,108 @@
     ViewBag.Title = "Home Page";
 }
 
-<div>
-    <table>
+@*@foreach (var m in Model.Students)
+    {
     <tr>
-        <td>ID</td>
-        <td>Name</td>
-        <td>State</td>
-        <td>City</td>
+        <td><input type="text" value="@m.ID" /></td>
+        <td><input type="text" value="@m.Name" /></td>
+        <td>
+            @Html.DropDownListFor(x => x.SelectedState new SelectList(Model.Students.States, "ID", "Name", Model.SelectedState), "-- Select States--", new { id = "cboState", @class = "edit-mode" })
+        </td>
+        <td>
+            @Html.DropDownListFor(x => x.SelectedCity new SelectList(Model.Students.Cities, "ID", "Name", Model.SelectedCity), "-- Select States--", new { id = "cboState", @class = "edit-mode" })
+        </td>
     </tr>
+    }*@
 
-    @*@foreach (var m in Model.Students)
-        {
-        <tr>
-            <td><input type="text" value="@m.ID" /></td>
-            <td><input type="text" value="@m.Name" /></td>
-            <td>
-                @Html.DropDownListFor(x => x.SelectedState new SelectList(Model.Students.States, "ID", "Name", Model.SelectedState), "-- Select States--", new { id = "cboState", @class = "edit-mode" })
-            </td>
-            <td>
-                @Html.DropDownListFor(x => x.SelectedCity new SelectList(Model.Students.Cities, "ID", "Name", Model.SelectedCity), "-- Select States--", new { id = "cboState", @class = "edit-mode" })
-            </td>
-        </tr>
-        }*@
+<style type="text/css">
+    .field-validation-error {
+   color: #C1372A !important;
+   display: block;
+   font-weight: normal !important;
+}
 
+input.input-validation-error,
+textarea.input-validation-error,
+select.input-validation-error
+{
+    background: #FEF1EC;
+    border: 1px solid #CD0A0A;
+}
 
-        @for(int i = 0; i < Model.Students.Count; i++)
-        {
+</style>
+<h1>Tabular data design in loop with html table</h1>
+@using (Html.BeginForm("Index", "Home", FormMethod.Post))
+{
+    <div>
+        <table>
             <tr>
-                <td><input type="text" value="@Model.Students[i].ID" /></td>
-                <td><input type="text" value="@Model.Students[i].Name" /></td>
-                <td>
-                    @Html.DropDownListFor(m => m.Students[i].StateID, new SelectList(Model.Students[i].States, "ID", "Name",Model.Students[i].StateID), "-- Select States--", new { @class = "edit-mode" })
-                </td>
-                <td>
-                    @Html.DropDownListFor(m => m.Students[i].CityID, new SelectList(Model.Students[i].Cities, "ID", "Name",Model.Students[i].CityID), "-- Select Cities--", new { @class = "edit-mode" })
-                </td>
+                <td>ID</td>
+                <td>Name</td>
+                <td>State</td>
+                <td>City</td>
             </tr>
-        }
-    </table>
-</div>
+            @for (int i = 0; i < Model.Students.Count; i++)
+            {
+                <tr>
+                    <td>
+                        @Html.TextBoxFor(m => m.Students[i].ID)
+                        @Html.ValidationMessageFor(m => m.Students[i].ID, "", new { @class = "text-danger" })
+                    </td>
+
+                    <td>
+                        @Html.TextBoxFor(m => m.Students[i].Name)
+                        @Html.ValidationMessageFor(m => m.Students[i].Name, "", new { @class = "text-danger" })
+                    </td>
+                    <td>
+                        @Html.DropDownListFor(m => m.Students[i].StateID, new SelectList(Model.Students[i].States, "ID", "Name", Model.Students[i].StateID), "-- Select States--", new { @class = "edit-mode" })
+                        @Html.ValidationMessageFor(m => m.Students[i].StateID, "", new { @class = "text-danger" })
+                    </td>
+                    <td>
+                        @Html.DropDownListFor(m => m.Students[i].CityID, new SelectList(Model.Students[i].Cities, "ID", "Name", Model.Students[i].CityID), "--Select States--", new { @class = "edit-model" })
+                        @Html.ValidationMessageFor(m => m.Students[i].CityID, "", new { @class = "text-danger" })
+                    </td>
+                </tr>
+            }
+        </table>
+    </div>
+    <p><input id="btnSubmit" type="submit" value="Submit" /></p>
+}
+
+
+
+@section Scripts
+{
+    @Scripts.Render("~/bundles/jqueryval")
+
+    <script type="text/javascript">
+    $(document).ready(function () {
+        $('#btnSubmit').click(function () {
+            var $form = $('form');
+            if ($form.valid()) {
+                alert("val Ok");
+            }
+            else {
+                alert("VAl Fail!");
+                $("span[class='field-validation-error']").each(function () {
+
+                    $(this).addClass("hidden");//Add class hidden to hide  @@Html.ValidationMessageFor(model => model.xyz) if using bootstrap , else use css
+                    var inputID = $(this).attr("data-valmsg-for");//get the id of the input field for which this validation prompted
+                    var validationMessage = $(this).html();//Get validation message for input filed which is prompted
+                    //$("#" + inputID).tooltip({ 'trigger': 'hover', 'title': validationMessage });//Trigger the tooltip now, if using bootstrap.
+
+                    //******OR*******
+
+                    $("#" + inputID).attr("title", validationMessage);
+                });
+            }
+            return false;
+        });
+    });
+
+
+    </script>
+}
+
+
+
