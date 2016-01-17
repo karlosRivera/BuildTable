@@ -16,14 +16,14 @@ namespace BuildTable.Models
 
     public class Student
     {
-        [Required]
+        [Required(ErrorMessage = "ID Required")]
         public int ID { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "Name Required")]
         public string Name { get; set; }
-        [Required]
+        [Required (ErrorMessage = "State Required")]
         public int StateID { get; set; }
-        [Required]
+        [Required(ErrorMessage = "City Required")]
         public int CityID { get; set; }
         public List<States> States { get; set; }
         public List<Cities> Cities { get; set; }

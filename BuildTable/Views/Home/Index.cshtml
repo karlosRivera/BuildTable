@@ -17,20 +17,30 @@
     </tr>
     }*@
 
-<style type="text/css">
-    .field-validation-error {
-   color: #C1372A !important;
-   display: block;
-   font-weight: normal !important;
-}
+<link href="http://cdnjs.cloudflare.com/ajax/libs/qtip2/2.2.1/jquery.qtip.min.css" rel="stylesheet" />
 
-input.input-validation-error,
-textarea.input-validation-error,
-select.input-validation-error
+<style type="text/css">
+.validation-error
 {
     background: #FEF1EC;
     border: 1px solid #CD0A0A;
 }
+
+.tooltip-inner {
+    max-width: 300px;
+    padding: 0;
+    border: solid 1px #ccc;
+    background-color: #f00;
+}
+.tooltip-alert{
+    padding: 8px 10px;
+    font-weight: bolder;
+    color: white;
+    background-color: #f00;
+} 
+
+.tooltip-arrow { border-bottom-color:black; }
+
 
 </style>
 <h1>Tabular data design in loop with html table</h1>
@@ -76,31 +86,64 @@ select.input-validation-error
 @section Scripts
 {
     @Scripts.Render("~/bundles/jqueryval")
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/qtip2/2.2.1/jquery.qtip.min.js"></script>
 
     <script type="text/javascript">
-    $(document).ready(function () {
-        $('#btnSubmit').click(function () {
-            var $form = $('form');
-            if ($form.valid()) {
-                alert("val Ok");
-            }
-            else {
-                
-                $('table td span.field-validation-error').each(function () {
-                    $(this).addClass("hidden");//Add class hidden to hide  @@Html.ValidationMessageFor(model => model.xyz) if using bootstrap , else use css
-                    var inputID = $(this).data("valmsg-for");//get the id of the input field for which this validation prompted
-                    var validationMessage = $(this).text();//Get validation message for input filed which is prompted
-                    //$("#" + inputID).tooltip({ 'trigger': 'hover', 'title': validationMessage });//Trigger the tooltip now, if using bootstrap.
-
-                    //******OR*******
-                    $("#" + inputID).attr("title", validationMessage);
-                });
-            }
-            return false;
+        $(document).ready(function () {
+            $('#btnSubmit').click(function () {
+                var $form = $('form');
+                if ($form.valid()) {
+                    alert("val Ok");
+                }
+                else {
+                    alert("val fail");
+                }
+                return false;
+            });
         });
-    });
 
+        (function ($) {
+            var classes = { groupIdentifier: ".form-group", error: 'has-error', success: null };//success: 'has-success' 
+            function updateClasses(inputElement, toAdd, toRemove) {
+                var group = inputElement.closest(classes.groupIdentifier);
+                if (group.length > 0) {
+                    group.addClass(toAdd).removeClass(toRemove);
+                }
+            }
+            function onError(inputElement, message) {
+                updateClasses(inputElement, classes.error, classes.success);
 
+                var options = { html: true, placement: 'bottom', title: '<div class="tooltip-alert alert-danger" data-placement="bottom">' + message + '</div>' };
+                $(inputElement).addClass('validation-error');
+                inputElement.tooltip("destroy")
+                    .addClass("error")
+                    .tooltip(options);
+            }
+            function onSuccess(inputElement) {
+                updateClasses(inputElement, classes.success, classes.error);
+                inputElement.tooltip("destroy");
+                $(inputElement).removeClass('validation-error');
+            }
+
+            function onValidated(errorMap, errorList) {
+                $.each(errorList, function () {
+                    onError($(this.element), this.message);
+                });
+
+                if (this.settings.success) {
+                    $.each(this.successList, function () {
+                        onSuccess($(this));
+                    });
+                }
+            }
+
+            $(function () {
+                $('form').each(function () {
+                    var validator = $(this).data('validator');
+                    validator.settings.showErrors = onValidated;
+                });
+            });
+        }(jQuery));
     </script>
 }
 
